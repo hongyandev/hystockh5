@@ -43,14 +43,6 @@ export default {
 
     },
     methods:{
-        beforeClose(action, done) {
-            if (action === 'confirm') {
-                //setTimeout(done, 1000);
-            } else {
-               // done();
-
-            }
-        },
         getVerifycode() {
             let phone = this.phone;
             getverifycode(phone).then(response => {
@@ -64,7 +56,6 @@ export default {
                 verifycode:this.verifycode
             };
             applogin(data).then(res => {
-                //this.$toast(res.data)
                 let self = this;
                 if(res.jwt){
                     var token = {
