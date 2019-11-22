@@ -96,7 +96,6 @@ export default {
   },
   created:function(){
       GetUserIndex().then(response=>{
-          debugger
           this.data=response;
       });
   },
