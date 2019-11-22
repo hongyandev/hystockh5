@@ -7,7 +7,7 @@
             <van-cell-group>
                 <van-field v-model="phone" placeholder="请输入手机号"/>
                  <van-field v-model="verifycode" center clearable placeholder="请输入短信验证码">
-                    <van-button slot="button" size="small" type="primary" @click="getVerifycode">发送验证码</van-button>
+                    <van-button slot="button" size="small" :disabled="disabled" type="primary" @click="getVerifycode">{{status ? ('重新获取验证码('+second+'s)') : '获取验证码'}}</van-button>
                 </van-field>
             </van-cell-group>
             <div style="margin: 10px;">
@@ -33,6 +33,9 @@ export default {
     },
     data() {
         return{
+            second: 60,
+            status: false,
+            disabled:false,
             phone: '',
             verifycode: '',
             showDialog: false,
@@ -43,12 +46,37 @@ export default {
 
     },
     methods:{
+        phoneNumber(value) {
+            if (value && (!(/^[1][34578]\d{9}$/).test(value) || !(/^[1-9]\d*$/).test(value) || value.length !== 11)) {
+                return true
+                //callback(new Error('手机号码不符合规范'))
+            }
+        },
         getVerifycode() {
             let phone = this.phone;
+            if(phone == ''){
+                this.$toast('请输入手机号码！');
+                return false;
+            }
+            if(this.phoneNumber(phone)){
+                this.$toast('手机号码不符合规范！');
+                return false
+            }
+            this.status = true;
+            this.disabled = true;
+            var time = setInterval(() => {
+                var second = this.second;
+                second--;
+                this.second = second;
+                if (second == 0) {
+                    clearInterval(time);
+                    this.second = 60;
+                    this.status = false;
+                }
+            }, 1000);
             getverifycode(phone).then(response => {
                 console.info(response)
-            })
-
+            });
         },
         login(){
             let data={
@@ -76,7 +104,8 @@ export default {
         },
         jxsclick(v){
             console.info(v)
-        }
+        },
+
     },
     created:function () {
 
