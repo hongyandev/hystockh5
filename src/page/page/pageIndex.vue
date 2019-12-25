@@ -25,12 +25,8 @@ export default {
         }
     },
     created:function(){
-        /*GetPage().then(response=>{
-            this.page=response;
-        });*/
-        //debugger
-        this.title = this.$route.query.jsxid;
-        console.info(this.$route.query.jsxid)
+        this.title = localStorage.getItem('companyName') || '';
+        // console.info(this.$route.query.jsxid)
     },
     methods:{
 

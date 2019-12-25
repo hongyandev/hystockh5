@@ -1,8 +1,7 @@
-
 import axios from 'axios'
 import store from '../store/store'
-import { Toast } from 'vant';
-import {baseUrl,dataSources} from './env';
+import {Toast} from 'vant';
+import {baseUrl, dataSources} from './env';
 import datas from '../data/data';
 
 
@@ -13,20 +12,20 @@ const service = axios.create({
 });
 
 
-const servicef = function(parameter){
-  if (parameter.remote){
-       return service(parameter);
-  }else{
-    //定义回调函数和axios一致
-    const promist = new Promise(function(resolve,reject){
-        var data=datas[parameter.url];
-        if(typeof data=='string'){
-          data= JSON.parse(data);
-        }
-        resolve(data);
-    })
-    return promist;
-  }
+const servicef = function (parameter) {
+    if (parameter.remote) {
+        return service(parameter);
+    } else {
+        //定义回调函数和axios一致
+        const promist = new Promise(function (resolve, reject) {
+            var data = datas[parameter.url];
+            if (typeof data == 'string') {
+                data = JSON.parse(data);
+            }
+            resolve(data);
+        })
+        return promist;
+    }
 }
 
 /*  service.interceptors.request.use(
@@ -93,30 +92,27 @@ service.interceptors.response.use(
     }
   )*/
 
-service.interceptors.request.use(config=>{
+service.interceptors.request.use(config => {
     var token = {
-        jwt:localStorage.getItem('jwt'),
-        uid:localStorage.getItem('uid')
+        jwt: localStorage.getItem('jwt'),
+        uid: localStorage.getItem('uid')
     }
     if (token != null) { // 判断是否存在token，如果存在的话，则每个http header都加上token
         config.headers.token = token.jwt;
         config.headers.uid = token.uid;
     }
-     return config;
-
-},error=> {
+    return config;
+}, error => {
     return Promise.reject(error);
 });
 
-service.interceptors.response.use(res=>{
-
-    if(res.data.code!='200'){
+service.interceptors.response.use(res => {
+    if (res.data.code != '200') {
         Toast(res.data.message);
-
-    }else{
+    } else {
         return res.data.data;
     }
-},error=>{
+}, error => {
     return Promise.reject(error);
 });
 export default servicef

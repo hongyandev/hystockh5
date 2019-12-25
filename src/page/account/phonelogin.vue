@@ -74,8 +74,11 @@ export default {
                     this.status = false;
                 }
             }, 1000);
-            getverifycode(phone).then(response => {
-                console.info(response)
+            getverifycode(phone).then(data => {
+                console.info(data);
+                if(data){
+                    this.verifycode = data;
+                }
             });
         },
         login(){
@@ -86,14 +89,11 @@ export default {
             applogin(data).then(res => {
                 let self = this;
                 if(res.jwt){
-                    var token = {
-                        jwt:res.jwt,
-                        uid:res.uid
-                    };
-                    debugger
                     //store.commit('setToken',token);
                     localStorage.setItem('jwt',res.jwt);
                     localStorage.setItem('uid',res.uid);
+                    localStorage.setItem('companyName',res.company ? res.company.companyName : '');
+                    localStorage.setItem('companyKhdm',res.company ? res.company.khdm : '');
                     self.$router.push({path:'/home'});
                 }else{
                     self.show = true;

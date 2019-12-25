@@ -10,12 +10,12 @@ let baseUrl = '';
 let routerMode = 'hash';
 let dataSources='local';//local=本地，其他值代表非本地
 
-
-if (process.env.NODE_ENV == 'development') {
+if (process.env.NODE_ENV === 'development') {
 	baseUrl = 'http://dev.jxc.sge.cn';
-
-}else if(process.env.NODE_ENV == 'production'){
+}else if(process.env.NODE_ENV === 'production'){
 	baseUrl = 'http://jxc.sge.cn';
+}else if(process.env.NODE_ENV === 'localhost'){
+	baseUrl = 'http://localhost:8081';
 }
 
 export {

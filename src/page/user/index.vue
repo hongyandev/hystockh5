@@ -73,8 +73,8 @@
           </van-col>
         </router-link>
       </van-row>-->
-      <van-cell title="选择默认经销商" is-link to="/user/defaultConmpany"/>
-      <van-cell title="我的收藏" is-link to="/user/favorite"/>
+      <van-cell title="我的供货商" is-link to="/user/defaultConmpany"/>
+      <!--<van-cell title="我的收藏" is-link to="/user/favorite"/>-->
       <van-cell title="收货地址" is-link to="/user/address"/>
       <van-cell title="账号管理" is-link to="/user/info"/>
     </van-cell-group>

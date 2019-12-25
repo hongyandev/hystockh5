@@ -8,48 +8,52 @@
             </van-field>
         </van-cell-group>
         <div style="margin: 10px;">
-            <van-button size="large" type="primary" @click="changephone" style="height: 45px;line-height:45px;">更换手机号</van-button>
+            <van-button size="large" type="primary" @click="changephone" style="height: 45px;line-height:45px;">更换手机号
+            </van-button>
         </div>
     </div>
 </template>
 
 <script>
-    import { Field } from 'vant';
-    import {changePhone ,getverifycode} from "../../../api/page.js";
-export default {
-    components:{
-        [Field.name]:Field
-    },
-    data(){
-        return{
-            phone: '',
-            verifycode: '',
-        }
-    },
-    methods:{
-        getVerifycode() {
-            let phone = this.phone;
-            getverifycode(phone).then(response => {
-                console.info(response)
-            })
+    import {Field} from 'vant';
+    import {changePhone, getverifycode} from "../../../api/page.js";
 
+    export default {
+        components: {
+            [Field.name]: Field
         },
-        changephone(){
-            let data={
-                username:this.phone,
-                verifycode:this.verifycode
-            };
-            changePhone(data).then(res=>{
-                debugger
-               // this.data = res
-            })
+        data() {
+            return {
+                phone: '',
+                verifycode: '',
+            }
+        },
+        methods: {
+            getVerifycode() {
+                let phone = this.phone;
+                getverifycode(phone).then(response => {
+                    if(response){
+                        this.verifycode = response;
+                    }
+                })
+
+            },
+            changephone() {
+                let data = {
+                    username: this.phone,
+                    verifycode: this.verifycode
+                };
+                changePhone(data).then(res => {
+                    debugger
+                    // this.data = res
+                })
+            }
+        },
+        created: function () {
+
+
         }
-    },
-    created:function () {
-
-
     }
-}
 </script>
 
 <style>
