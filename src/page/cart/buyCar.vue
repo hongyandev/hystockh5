@@ -1,39 +1,42 @@
 <template>
-    <div class="cart cart-main">
-        <headerNav title="购物车" :rightTitle="this.editor ? '完成' : '管理'" @rightbtn="rightClick"/>
-        <div class="st-spacing-main" v-for="(item) in cartInfoList" :key="item.id">
-            <div class="st-item product-item">
-                <div class="st-border-bottom store-title">
-                    <!--<p class="theme-checkbox" @click="checkShop(item)">
-                        <van-checkbox v-model="item.checked">
-                          <span>
-                              {{item.shopTitle}}
-                              <van-icon name="arrow"/>
-                          </span>
-                        </van-checkbox>
-                    </p>-->
+    <div>
+        <div class="cart cart-main">
+            <headerNav title="购物车" :rightTitle="this.editor ? '完成' : '管理'" @rightbtn="rightClick"/>
+            <div class="st-spacing-main" v-for="(item) in cartInfoList" :key="item.id">
+                <div class="st-item product-item">
+                    <div class="st-border-bottom store-title">
+                        <!--<p class="theme-checkbox" @click="checkShop(item)">
+                            <van-checkbox v-model="item.checked">
+                              <span>
+                                  {{item.shopTitle}}
+                                  <van-icon name="arrow"/>
+                              </span>
+                            </van-checkbox>
+                        </p>-->
+                    </div>
+                    <ul class="commodity-list item-list" v-for="(pros,value) in item.productList" :key="value">
+                        <li class="theme-checkbox" @click="ischeck(item,pros)">
+                            <van-checkbox  v-model="pros.isChecked"></van-checkbox>
+                        </li>
+                        <li>
+                            <van-swipe-cell :right-width="65" :on-close="onClose">
+                                <cart :product='pros' :iscard='true'></cart>
+                                <template slot="right">
+                                    <van-button square type="danger" text="删除"/>
+                                </template>
+                            </van-swipe-cell>
+                        </li>
+                    </ul>
                 </div>
-                <ul class="commodity-list item-list" v-for="(pros,value) in item.productList" :key="value">
-                    <li class="theme-checkbox" @click="ischeck(item,pros)">
-                        <van-checkbox  v-model="pros.isChecked"></van-checkbox>
-                    </li>
-                    <li>
-                        <van-swipe-cell :right-width="65" :on-close="onClose">
-                            <cart :product='pros' :iscard='true'></cart>
-                            <template slot="right">
-                                <van-button square type="danger" text="删除"/>
-                            </template>
-                        </van-swipe-cell>
-                    </li>
-                </ul>
             </div>
+            <van-submit-bar v-if="!this.editor" class="settlement" :price="allPrice*100" :disabled="!allCount" :button-text="submitBarText" @submit="onSubmit">
+                <van-checkbox class="theme-checkbox" v-model="isCheckAll" @click="checkAll()">全选</van-checkbox>
+            </van-submit-bar>
+            <van-submit-bar v-else class="settlement" :button-text="submitBarText" @submit="onDelete">
+                <van-checkbox class="theme-checkbox" v-model="isCheckAll" @click="checkAll(allCount)">全选</van-checkbox>
+            </van-submit-bar>
         </div>
-        <van-submit-bar v-if="!this.editor" class="settlement" :price="allPrice*100" :disabled="!allCount" :button-text="submitBarText" @submit="onSubmit">
-            <van-checkbox class="theme-checkbox" v-model="isCheckAll" @click="checkAll()">全选</van-checkbox>
-        </van-submit-bar>
-        <van-submit-bar v-else class="settlement" :button-text="submitBarText" @submit="onDelete">
-            <van-checkbox class="theme-checkbox" v-model="isCheckAll" @click="checkAll(allCount)">全选</van-checkbox>
-        </van-submit-bar>
+        <navigate :active="2"/>
     </div>
 </template>
 
@@ -283,6 +286,7 @@
         font-size:14px;
     }
     .settlement{
+        bottom: 50px;
         .theme-checkbox{
             margin-left:15px;
         }

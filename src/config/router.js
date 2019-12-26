@@ -50,7 +50,7 @@ const routes = [
         path: '/user/info/userInfo',
         component: () => import('../page/user/info/userInfo'),
         meta: {
-            title: '修改个人信息'
+            title: '修改我的信息'
         }
     },
     {
@@ -71,7 +71,7 @@ const routes = [
         path: '/user/defaultConmpany',
         component: () => import('../page/user/company/defalutCompany'),
         meta: {
-            title: '选择默认经销商'
+            title: '我的供货商'
         }
     },
     {
@@ -169,7 +169,7 @@ const routes = [
         path: '/jxslist',
         component: () => import('../page/jxslist/list'),
         meta: {
-            title: '经销商列表'
+            title: '我的供货商'
         }
     },
     {

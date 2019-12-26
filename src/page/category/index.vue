@@ -68,7 +68,7 @@
                 </ul>   
             </div>
         </div>
-        <navigate />
+        <navigate :active="1"/>
     </div>
 </template>
 

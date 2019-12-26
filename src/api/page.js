@@ -1,7 +1,7 @@
 import request from "../config/request";
 import qs from 'qs';
-import store from "../store/store";
-import {mapGetters} from 'vuex'
+// import store from "../store/store";
+// import {mapGetters} from 'vuex'
 
 
 export function GetPage() {

@@ -10,7 +10,6 @@ const store = new vuex.Store({
 
     mutations: {
         setToken(state,data){
-            console.info(data);
            // localStorage.setItem('token', JSON.stringify(data));
             state.token = data;
         }

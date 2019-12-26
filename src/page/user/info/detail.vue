@@ -1,6 +1,6 @@
 <template>
     <div>
-        <headerNav title="账号管理"/>
+        <headerNav title="设置"/>
         <van-cell-group>
             <van-cell title="修改个人信息"  is-link to="/user/info/userInfo"/>
             <van-cell title="修改绑定手机"  is-link to="/user/info/changePhone"/>

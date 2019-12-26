@@ -52,7 +52,7 @@
     </van-cell-group>
     
     <van-cell-group class="user-group">
-      <van-cell title="我的服务" />
+      <!--<van-cell title="我的服务" />-->
       <!--<van-row class="user-links">
         <router-link  to="/user/coupon">
           <van-col span="6">
@@ -76,10 +76,10 @@
       <van-cell title="我的供货商" is-link to="/user/defaultConmpany"/>
       <!--<van-cell title="我的收藏" is-link to="/user/favorite"/>-->
       <van-cell title="收货地址" is-link to="/user/address"/>
-      <van-cell title="账号管理" is-link to="/user/info"/>
+      <van-cell title="设置" is-link to="/user/info"/>
     </van-cell-group>
 
-    <navigate />
+    <navigate :active="3"/>
   </div>
 </template>
 

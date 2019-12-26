@@ -15,6 +15,7 @@
 <script>
     import {getAccounts, setDefaultCompany} from '../../../api/page.js'
     import loading from '../../../components/common/loading';
+    import {setAccount} from '../../../config/common.js';
     export default {
         components: {
             loading
@@ -28,7 +29,10 @@
         },
         methods: {
             selectCompany(item) {
-                console.log(item);
+                let self = this;
+                setAccount(item);
+                let url = self.$route.query.url || '/user/index';
+                self.$router.push({path: url});
             },
             setDefault(item) {
                 let data = {

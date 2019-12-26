@@ -1,6 +1,6 @@
 <template>
     <div style="height:50px;">
-    <van-tabbar >
+    <van-tabbar v-model="activeIndex">
         <van-tabbar-item icon="wap-home" to="/home">首页</van-tabbar-item>
         <van-tabbar-item icon="wap-nav" to="/category" >分类</van-tabbar-item>
         <van-tabbar-item icon="cart" to="/cart" >购物车</van-tabbar-item>
@@ -16,7 +16,13 @@ export default {
     components:{
         [Tabbar.name]: Tabbar,
         [TabbarItem.name]: TabbarItem,
-    }
+    },
+    data() {
+        return {
+            activeIndex: this.active,
+        }
+    },
+    props: ['active']
 
 }
 </script>

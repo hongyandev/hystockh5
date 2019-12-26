@@ -1,7 +1,7 @@
 <template>
     <div>
         <page/>
-        <navigate />
+        <navigate :active="0"/>
     </div>
 </template>
 
