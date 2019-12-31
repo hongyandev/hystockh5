@@ -30,7 +30,7 @@
     import {Cell} from 'vant';
     import {getverifycode, applogin} from "../../api/page.js";
     import {setAccount} from "../../config/common.js";
-    let logo = require('../../images/logo.png');
+    let logo = require('../../assets/images/logo.png');
     export default {
         components: {
             [Cell.name]: Cell

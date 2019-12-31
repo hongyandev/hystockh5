@@ -1,7 +1,8 @@
 
 import headerNav from '../components/header/nav';
 
-import navigate from '../components/footer/navigate.vue'
+import navigate from '../components/footer/navigate.vue';
+import productcard from '../components/common/productcard';
 import {
   Tag,
   Col,
@@ -20,7 +21,7 @@ import {
   Badge, BadgeGroup,Popup,Stepper,RadioGroup, Radio,Picker,Uploader,Info,Loading
 } from 'vant';
 
-const components=[
+const components = [
     Tag,
     Col,
     Icon,
@@ -35,11 +36,11 @@ const components=[
     Sku,
     Card,
     Button,
-    SwipeCell ,
-    Dialog ,
-    headerNav, 
-    Tab, Tabs,Toast,Row,Checkbox, CheckboxGroup, SubmitBar,NavBar ,Tabbar, TabbarItem,navigate,Panel,List ,Step, Steps,Field ,
-    Badge, BadgeGroup,Popup,Stepper,RadioGroup, Radio,Picker,Uploader,Info,Loading
+    SwipeCell,
+    Dialog,
+    headerNav,
+    Tab, Tabs, Toast, Row, Checkbox, CheckboxGroup, SubmitBar, NavBar, Tabbar, TabbarItem, navigate, Panel, List, Step, Steps, Field,
+    Badge, BadgeGroup, Popup, Stepper, RadioGroup, Radio, Picker, Uploader, Info, Loading, productcard
 ]
 
 

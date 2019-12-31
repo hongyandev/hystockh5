@@ -79,7 +79,7 @@
       <van-cell title="设置" is-link to="/user/info"/>
     </van-cell-group>
 
-    <navigate :active="3"/>
+    <navigate :active="4"/>
   </div>
 </template>
 

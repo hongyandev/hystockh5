@@ -1,4 +1,4 @@
-import request from "../config/request";
+import {request} from "../config/request";
 import qs from 'qs';
 // import store from "../store/store";
 // import {mapGetters} from 'vuex'
@@ -112,7 +112,16 @@ export function GetUserIndex() {
     })
 }
 
-//
+//用户面版
+export function getUserInfo() {
+    return request({
+        remote: true,
+        url: 'app/my/userInfo',
+        method: 'post'
+    })
+}
+
+//修改用户信息
 export function modifyUserInfo(params) {
     return request({
         remote: true,
@@ -138,11 +147,19 @@ export function changePhone(params) {
     })
 }
 
-//
+//省市区
 export function getAddress() {
     return request({
         remote: true,
         url: "/settings/all_district",
         method: "get",
+    })
+}
+export function getCategory(params) {
+    return request({
+        remote: true,
+        data: params,
+        url: "/app/category/list",
+        method: "post",
     })
 }

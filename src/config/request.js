@@ -1,5 +1,4 @@
 import axios from 'axios'
-import store from '../store/store'
 import {Toast} from 'vant';
 import {baseUrl, dataSources} from './env';
 import datas from '../data/data';
@@ -12,7 +11,7 @@ const service = axios.create({
 });
 
 
-const servicef = function (parameter) {
+const request = function (parameter) {
     if (parameter.remote) {
         return service(parameter);
     } else {
@@ -26,6 +25,22 @@ const servicef = function (parameter) {
         })
         return promist;
     }
+}
+
+const resetToken = function () {
+    service.interceptors.request.use(config => {
+        var token = {
+            jwt: localStorage.getItem('jwt'),
+            uid: localStorage.getItem('uid')
+        }
+        if (token != null) { // 判断是否存在token，如果存在的话，则每个http header都加上token
+            config.headers.token = token.jwt;
+            config.headers.uid = token.uid;
+        }
+        return config;
+    }, error => {
+        return Promise.reject(error);
+    });
 }
 
 /*  service.interceptors.request.use(
@@ -115,4 +130,4 @@ service.interceptors.response.use(res => {
 }, error => {
     return Promise.reject(error);
 });
-export default servicef
+export {request, resetToken};

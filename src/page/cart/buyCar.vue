@@ -36,7 +36,7 @@
                 <van-checkbox class="theme-checkbox" v-model="isCheckAll" @click="checkAll(allCount)">全选</van-checkbox>
             </van-submit-bar>
         </div>
-        <navigate :active="2"/>
+        <navigate :active="3"/>
     </div>
 </template>
 

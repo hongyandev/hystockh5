@@ -25,7 +25,7 @@ export default {
         }
     },
     created:function(){
-        this.title = localStorage.getItem('companyName') || '';
+        this.title = localStorage.getItem('companyName') || '请选择供货商';
         // console.info(this.$route.query.jsxid)
     },
     methods:{
