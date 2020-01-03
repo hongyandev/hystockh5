@@ -160,7 +160,7 @@ const routes = [
     },
     {
         path: '/search',
-        component: () => import('../page/product/list'),
+        component: () => import('../page/product/index'),
         meta: {
             title: '商品列表'
         }

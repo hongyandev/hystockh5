@@ -2,7 +2,7 @@
     <div>
         <van-search
                 v-model="value"
-                placeholder="请输入搜索关键词"
+                placeholder="请输入商品关键词"
                 show-action
                 @search="onSearch"
         >
@@ -36,6 +36,7 @@
         data() {
             return {
                 value: "",
+                categoryId: "",
                 activeKey: 0,
                 fullHeight: document.documentElement.clientHeight - 93,
                 fullWidth: document.documentElement.clientWidth - 99,
