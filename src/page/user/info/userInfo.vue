@@ -22,7 +22,8 @@
 
 <script>
     import {Field, Picker, Area, Popup} from 'vant';
-    import {getUserInfo, modifyUserInfo, getAddress} from '../../../api/page.js';
+    import {getUserInfo, modifyUserInfo} from '../../../api/my';
+    import {getAddress} from '../../../api/common';
     import loading from '../../../components/common/loading';
     const _ = require('lodash');
     export default {

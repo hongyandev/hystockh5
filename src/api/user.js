@@ -1,4 +1,4 @@
-import request from "../config/request";
+import {request} from "../config/request";
 
 
 export function GetUserIndex() {

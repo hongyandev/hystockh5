@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import {getAccounts, setDefaultCompany} from '../../../api/page.js'
+    import {getAccounts, setDefaultCompany} from '../../../api/my.js'
     import loading from '../../../components/common/loading';
     import {setAccount} from '../../../config/common.js';
     export default {

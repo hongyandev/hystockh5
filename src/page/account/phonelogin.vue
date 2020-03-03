@@ -20,7 +20,8 @@
         </div>
         <div>
             <van-dialog v-model="showDialog" title="选择我的供货商" show-cancel-button>
-                <van-cell v-for="item in ascounts" @click="jxsclick(item)" title="item.companyName"/>
+                <van-cell v-for="item in ascounts" :key="item.uid" @click="jxsclick(item)"
+                          title="item.company.companyName"/>
             </van-dialog>
         </div>
     </div>
@@ -28,8 +29,9 @@
 
 <script>
     import {Cell} from 'vant';
-    import {getverifycode, applogin} from "../../api/page.js";
+    import {getverifycode, applogin} from "../../api/account";
     import {setAccount} from "../../config/common.js";
+
     let logo = require('../../assets/images/logo.png');
     export default {
         components: {
@@ -75,10 +77,10 @@
                         clearInterval(time);
                         this.second = 60;
                         this.status = false;
+                        this.disabled = false;
                     }
                 }, 1000);
                 getverifycode(phone).then(data => {
-                    console.info(data);
                     if (data) {
                         this.verifycode = data;
                     }
@@ -89,14 +91,14 @@
                     username: this.phone,
                     verifycode: this.verifycode
                 };
+                let self = this;
                 applogin(data).then(res => {
-                    let self = this;
-                    if (res.jwt) {
-                        setAccount(res, self);
-                        self.$router.push({path: '/home'});
-                    } else {
+                    if (!res.jwt) {
                         self.show = true;
                         self.accounts = res.accounts;
+                    } else {
+                        setAccount(res, self);
+                        self.$router.push({path: '/home'});
                     }
 
                 })
@@ -108,7 +110,7 @@
             }
         },
         created: function () {
-            this.logoStyle = 'background:url('+logo+') center 18px no-repeat; background-size:161px; height:100px';
+            this.logoStyle = 'background:url(' + logo + ') center 18px no-repeat; background-size:161px; height:100px';
         },
         mounted: function () {
         }

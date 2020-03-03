@@ -15,13 +15,13 @@ const routes = [
             title: '首页'
         }
     },
-    {
-        path: '/home/:id',
-        component: () => import('../page/index'),
-        meta: {
-            title: '首页'
-        }
-    },
+    // {
+    //     path: '/home/:id',
+    //     component: () => import('../page/index'),
+    //     meta: {
+    //         title: '首页'
+    //     }
+    // },
     {
         path: '/login/phone',
         component: () => import('../page/account/phonelogin'),
@@ -180,7 +180,7 @@ const routes = [
         }
     },
     {
-        name: 'cart',
+        path: '/cart',
         component: () => import('../page/cart/buyCar'),
         meta: {
             title: '购物车'
@@ -194,7 +194,7 @@ const routes = [
         }
     },
     {
-        name: 'category',
+        path: '/category',
         component: () => import('../page/category/index'),
         meta: {
             title: '分类'
@@ -206,6 +206,7 @@ const routes = [
 routes.forEach(route => {
     route.path = route.path || '/' + (route.name || '');
 });
+
 
 const router = new Router({routes});
 

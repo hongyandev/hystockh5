@@ -65,6 +65,9 @@ export default {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+    .van-card__thumb {
+        background-color: #ebedf0;
+    }
     .van-tag {
         line-height: 12px;
         margin-right: 5px;

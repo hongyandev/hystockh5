@@ -16,8 +16,8 @@
 
 <script>
     import {Field} from 'vant';
-    import {changePhone, getverifycode} from "../../../api/page.js";
-
+    import {getverifycode} from "../../../api/account";
+    import {changePhone} from "../../../api/my";
     export default {
         components: {
             [Field.name]: Field

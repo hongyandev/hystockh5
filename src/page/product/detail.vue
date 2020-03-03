@@ -8,21 +8,21 @@
         <div class="page-content">
             <div class="goods">
                 <!--<headerNav title="商品详情"/>-->
-                <van-swipe class="goods-swipe" :loop="false">
+                <van-swipe v-if="goods.thumb.length > 0" class="goods-swipe" :loop="false">
                     <van-swipe-item v-for="thumb in goods.thumb" :key="thumb">
                         <img :src="thumb">
                     </van-swipe-item>
                 </van-swipe>
-
+                <div v-else :style="'background-color: #ebedf0;width:100%; height:'+contentWidth+'px'"></div>
                 <van-cell-group>
                     <van-cell>
                         <span class="goods-price">{{ formatPrice(goods.price) }}</span>
-                        <span class="goods-market-price">{{ formatPrice(goods.market_price) }}</span>
+                        <span v-if="goods.market_price > goods.price" class="goods-market-price">{{ formatPrice(goods.market_price) }}</span>
                         <div class="goods-title">{{ goods.title }}</div>
                         <div class="goods-subtit">{{goods.subtitle}}</div>
                     </van-cell>
 
-                    <van-cell @click="onClickShowTag" class="goods-tag">
+                    <van-cell v-if="0==1" @click="onClickShowTag" class="goods-tag">
                         <template slot="title" style="font-size:10px;">
                             <img src="https://haitao.nos.netease.com/ba8a4c2fdaa54f82a45261293c116af61419663676663i46n3jlh10028.png"/>
                             <span>挪威品牌</span>
@@ -42,7 +42,7 @@
                     </van-cell>
                 </van-cell-group>
 
-                <van-cell-group class="goods-cell-group">
+                <van-cell-group v-if="0==1" class="goods-cell-group">
                     <van-cell is-link @click="showPromotion">
                         <template slot="title">
                             <span style="margin-right: 10px;">领券</span>
@@ -61,22 +61,19 @@
                     </van-cell>
                 </van-cell-group>
 
-                <van-cell-group class="goods-cell-group">
+                <van-cell-group v-if="0==1" class="goods-cell-group">
                     <van-cell is-link @click="showSku">
                         <template slot="title">
                             <span style="margin-right: 10px;">已选</span>
                             <span>10件装</span>
                         </template>
                     </van-cell>
-
                 </van-cell-group>
-
-                <div class="goods-info">
+                <div v-if="goods.info!=''" class="goods-info">
                     <p class="goods-info-title">图文详情</p>
-                    <div v-html="goods.info"></div>
+                    <div class="goods-info-content" v-html="goods.info"></div>
                 </div>
                 <van-goods-action>
-
                     <van-goods-action-mini-btn icon="wap-home" @click="onClickHome">
                         首页
                     </van-goods-action-mini-btn>
@@ -91,7 +88,6 @@
                     </van-goods-action-big-btn>
                 </van-goods-action>
                 <van-actionsheet v-model="show" title="促销" style="font-size:14px;">
-
                     <van-cell is-link @click="sorry">
                         <template slot="title">
                             <van-tag type="danger">多买优惠</van-tag>
@@ -113,7 +109,6 @@
                 </van-actionsheet>
 
                 <van-actionsheet v-model="showTag" title="服务说明" style="font-size:14px;">
-
                     <van-cell>
                         <template slot="title">
                             <van-icon name="passed" color="red" style="margin-right: 10px;"/>
@@ -154,7 +149,7 @@
                         v-model="showBase"
                         :sku="skuData.sku"
                         :goods="skuData.goods_info"
-                        :goods-id="skuData.goods_id"
+                        :goods-id="skuData.goods_info.goods_id"
                         :hide-stock="skuData.sku.hide_stock"
                         :quota="skuData.quota"
                         :quota-used="skuData.quota_used"
@@ -162,8 +157,6 @@
                         reset-selected-sku-on-hide
                         disable-stepper-input
                         :close-on-click-overlay="closeOnClickOverlay"
-                        :message-config="messageConfig"
-                        :custom-sku-validator="customSkuValidator"
                         @buy-clicked="onBuyClicked"
                         @add-cart="onAddCartClicked"
                 />
@@ -173,64 +166,51 @@
 </template>
 
 <script>
-    import skuData from '../../data/sku';
+    import _ from 'lodash';
+    import {getGoodsDetail, getGoodsSku} from "../../api/goods"
 
     export default {
         name: 'product-detail',
         components: {},
         data() {
-            this.skuData = skuData;
             return {
                 show: false,
                 showTag: false,
                 goods: {
-                    title: '【每日一粒益智又长高】 Lifeline Care 儿童果冻鱼油DHA维生素D3聪明长高 软糖 30粒 2件装',
-                    subtitle: '【品牌直采】Q弹美味，无腥味果冻鱼油，每粒含足量鱼油DHA，帮助视网膜和大脑健康发育，让你的宝宝明眼又聪明，同时补充400国际单位维生素D3，强壮骨骼和牙齿。特含DPA，让宝宝免疫力更强，没病来扰。',
-                    price: 2680,
-                    market_price: 9999,
-                    express: '免运费',
-                    remain: 19,
-                    thumb: [
-                        'https://img.yzcdn.cn/public_files/2017/10/24/e5a5a02309a41f9f5def56684808d9ae.jpeg',
-                        'https://img.yzcdn.cn/public_files/2017/10/24/1791ba14088f9c2be8c610d0a6cc0f93.jpeg'
-                    ],
-                    info: '<p style="text-align:center;"><img src="https://haitao.nosdn2.127.net/ac19460151ee4d95a6657202bcfc653c1531470912089jjjq8ml410763.jpg" ></p><p style="text-align:center;"><img src="https://haitao.nos.netease.com/2a91cfad22404e5498d347672b1440301531470912182jjjq8mnq10764.jpg" ></p><p style="text-align:center;"><img src="https://haitao.nos.netease.com/caddd5a213de4c1cb1347c267e8275731531470912412jjjq8mu410765.jpg" ></p>',
+                    id: 0,
+                    title: '',
+                    subtitle: '',
+                    price: 0,
+                    market_price: 0,
+                    express: '',
+                    remain: 0,
+                    thumb: [],
+                    info: '',
                 },
+                skuData: {
+                    quota: 0,
+                    quota_used: 0,
+                    goods_info: {
+                        goods_id: 0,
+                        title: '',
+                        picture: ''
+                    },
+                    sku: {
+                        tree: [],
+                        list: [],
+                        price: '0.01',
+                        stock_num: 0,
+                        collection_id: 0,
+                        none_sku: true,
+                        messages: [],
+                        hide_stock: false
+                    }
+                },
+                contentWidth: document.documentElement.clientWidth / 2,
                 showBase: false,
                 showCustom: false,
                 showStepper: false,
-                closeOnClickOverlay: true,
-                initialSku: {
-                    s1: '30349',
-                    s2: '1193'
-                },
-                customSkuValidator: (component) => {
-                    return '请选择xxx';
-                },
-                customStepperConfig: {
-                    quotaText: '单次限购100件',
-                    stockFormatter: (stock) => `剩余${stock}间`,
-                    handleOverLimit: (data) => {
-                        const {action, limitType, quota} = data;
-                        if (action === 'minus') {
-                            this.$toast('至少选择一件商品');
-                        } else if (action === 'plus') {
-                            if (limitType === LIMIT_TYPE.QUOTA_LIMIT) {
-                                this.$toast(`限购${quota}件`);
-                            } else {
-                                this.$toast('库存不够了~~');
-                            }
-                        }
-                    }
-                },
-                messageConfig: {
-                    uploadImg: (file, img) => {
-                        return new Promise(resolve => {
-                            setTimeout(() => resolve(img), 1000);
-                        });
-                    },
-                    uploadMaxSize: 3
-                }
+                closeOnClickOverlay: true
             };
         },
         props: {
@@ -243,8 +223,8 @@
             onClickHome() {
                 this.$router.push('/home');
             },
-            formatPrice(data) {
-                return '¥' + (data / 100).toFixed(2);
+            formatPrice(price) {
+                return '¥' + _.ceil(_.divide(price, 100), 2);
             },
             onClickCart() {
                 this.$router.push('/cart');
@@ -257,6 +237,21 @@
             },
             showSku() {
                 this.showBase = true;
+                console.log('sku', this.goods.id);
+                let salf = this;
+                getGoodsSku({
+                    goodsId: salf.goods.id
+                }).then(res => {
+                    console.log(res)
+                    _.assignIn(salf.skuData, {
+                        goods_info: {
+                            goods_id: salf.goods.id,
+                            title: salf.goods.name,
+                            picture: salf.goods.thumb[0] || ''
+                        },
+                        sku: res.sku
+                    })
+                });
             },
             onClickShowTag() {
                 this.showTag = true;
@@ -265,19 +260,36 @@
                 this.$toast(JSON.stringify(data));
             },
             onAddCartClicked(data) {
+                console.log(data);
                 this.$toast(JSON.stringify(data));
             },
 
         },
         mounted: function () {
-            console.log("detail", this.productId);
+            let salf = this;
+            console.log("detail", salf.productId);
+            getGoodsDetail({
+                goodsId: salf.productId
+            }).then(res => {
+                console.log(res)
+                _.assignIn(salf.goods, {
+                    id: res.id,
+                    title: res.name,
+                    subtitle: res.specs,
+                    price: _.multiply(_.multiply(res.price, _.subtract(1, _.divide(res.discountRate, 100))),100),
+                    market_price: _.multiply(res.price, 100),
+                    thumb: res.thumb,
+                    info: res.detail || '',
+                })
+            });
+
         }
     };
 </script>
 
 <style lang="less">
     .goods {
-        padding-top: 95px;
+        // padding-top: 95px;
         padding-bottom: 50px;
         &-swipe {
             img {
@@ -340,6 +352,10 @@
             font-weight: 700;
             margin: 10px;
             border-top: 1px solid #e5e5e5;
+        }
+        &-info-content {
+            margin-bottom: 50px;
+            padding: 5px;
         }
         &-info p {
             margin: 0;

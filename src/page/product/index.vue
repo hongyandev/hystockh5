@@ -3,7 +3,7 @@
         <div class="page-view">
             <div class="page-header">
                 <van-search
-                        v-model="value"
+                        v-model="query"
                         placeholder="请输入商品关键词"
                         show-action
                         @search="onSearch"
@@ -13,12 +13,12 @@
             </div>
             <van-list class="page-content product-list" v-model="loading" :finished="finished"
                       finished-text="没有更多了"
-                      @load="onLoad">
+                      @load="onLoad" :style="'height:'+contentHeight+'px'">
                 <product-card v-for="(product,i) in list" :key="i" :product='product' @click="showProduct(product)"/>
             </van-list>
             <navigate :active="1"/>
         </div>
-        <div v-if="show" style="z-index: 2001;position: fixed;width: 100%;height: 100%;background-color: white">
+        <div v-if="show" class="product-detail">
             <product-detail :product-id="productId" @hidden-event="onShow"></product-detail>
         </div>
     </div>
@@ -29,6 +29,7 @@
     import _ from 'lodash';
     import {Search} from 'vant';
     import ProductDetail from "./detail";
+    import {getGoodsList} from "../../api/goods"
 
     export default {
         components: {
@@ -37,56 +38,16 @@
         },
         data() {
             return {
-                value: "",
+                query: "",
                 categoryId: "",
+                current: 1,
+                size: 10,
                 loading: false,
                 finished: false,
                 list: [],
                 show: false,
                 productId: 0,
-                products: [
-                    {
-                        id: 1,
-                        imageURL: 'https://pop.nosdn.127.net/19e33c9b-6c22-4a4b-96da-1cb7afb32712',
-                        title: 'BEYOND博洋家纺 床上套件 秋冬保暖纯棉床单被套 双人被罩 磨毛全棉印花床品四件套',
-                        price: '13.00',
-                    },
-                    {
-                        id: 1,
-                        imageURL: 'https://pop.nosdn.127.net/19e33c9b-6c22-4a4b-96da-1cb7afb32712',
-                        title: 'BEYOND博洋家纺 床上套件 秋冬保暖纯棉床单被套 双人被罩 磨毛全棉印花床品四件套',
-                        price: '499.00',
-                        tags: ['满199减100', '2件起购'],
-                    },
-                    {
-                        id: 1,
-                        imageURL: 'https://pop.nosdn.127.net/19e33c9b-6c22-4a4b-96da-1cb7afb32712',
-                        title: 'BEYOND博洋家纺 床上套件 秋冬保暖纯棉床单被套 双人被罩 磨毛全棉印花床品四件套',
-                        price: '499.00',
-                        tags: ['新品'],
-                        imageTag: '仅剩1件',
-                    },
-                    {
-                        id: 1,
-                        imageURL: 'https://pop.nosdn.127.net/19e33c9b-6c22-4a4b-96da-1cb7afb32712',
-                        title: 'BEYOND博洋家纺 床上套件 秋冬保暖纯棉床单被套 双人被罩 磨毛全棉印花床品四件套',
-                        price: '499.00',
-                        tags: ['赠'],
-                        imageTag: '预约',
-                    },
-                    {
-                        id: 1,
-                        imageURL: 'https://pop.nosdn.127.net/19e33c9b-6c22-4a4b-96da-1cb7afb32712',
-                        title: 'BEYOND博洋家纺 床上套件 秋冬保暖纯棉床单被套 双人被罩 磨毛全棉印花床品四件套',
-                        price: '15.00',
-                    },
-                    {
-                        id: 1,
-                        imageURL: 'https://pop.nosdn.127.net/19e33c9b-6c22-4a4b-96da-1cb7afb32712',
-                        title: 'BEYOND博洋家纺 床上套件 秋冬保暖纯棉床单被套 双人被罩 磨毛全棉印花床品四件套',
-                        price: '125.50',
-                    }
-                ]
+                contentHeight: document.documentElement.clientHeight - 104
             };
         },
         methods: {
@@ -94,27 +55,45 @@
                 this.show = sign;
             },
             showProduct(product) {
+                this.productId = product.id
                 this.show = true;
                 // this.$router.push('/product/' + product.id);
             },
             onLoad() {
-                console.log(this.value);
-                // 异步更新数据
-                setTimeout(() => {
-                    for (let i = 0; i < 10; i++) {
-                        let item = _.clone(_.sample(this.products));
-                        this.list.push(item);
+                let self = this;
+                getGoodsList({
+                    current: self.current,
+                    size: self.size,
+                    query: self.query,
+                    categoryId: self.categoryId
+                }).then(res => {
+                    if (res.pages > 0) {
+                        _.forEach(res.records, function (item, index) {
+                            self.list.push({
+                                id: item.id,
+                                imageURL: item.thumb,
+                                title: item.name,
+                                desc: item.specs,
+                                price: item.price
+                            });
+                        })
+                        // 加载状态结束
+                        self.loading = false;
+                        // 数据全部加载完成
+                        if (self.current === res.pages) {
+                            self.finished = true;
+                        } else {
+                            self.current ++;
+                        }
+                    } else {
+                        self.loading = false;
+                        self.finished = true;
                     }
-                    // 加载状态结束
-                    this.loading = false;
-                    // 数据全部加载完成
-                    if (this.list.length >= 40) {
-                        this.finished = true;
-                    }
-                }, 500);
+                });
             },
             onSearch() {
                 this.list = [];
+                this.current = 1;
                 this.onLoad();
             }
         }
@@ -123,7 +102,6 @@
 
 <style lang="less">
     @import "../../assets/style/pageview.css";
-
     .product-list {
         .additional .price {
             position: absolute;
@@ -131,8 +109,11 @@
             height: 34px;
         }
     }
-
     .product-detail {
-
+        z-index: 2001;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: white
     }
 </style>

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import {getAccounts} from "../../api/page.js";
+    import {getAccounts} from "../../api/my";
 export default {
   data() {
     return {

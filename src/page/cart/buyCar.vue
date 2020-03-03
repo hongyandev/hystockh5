@@ -42,6 +42,7 @@
 
 <script>
     import cart from '../../components/common/cart';
+    import {getCartsList} from "../../api/cart"
     import {SwipeCell, Button , Dialog }  from 'vant';
     export default {
         components:{
@@ -251,6 +252,11 @@
                     this._totalCount()
                 }
             }
+        },
+        mounted: function () {
+            getCartsList().then(res => {
+                console.log(res);
+            });
         }
     }
 </script>

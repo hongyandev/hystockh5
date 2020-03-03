@@ -25,7 +25,7 @@
 
 <script>
     import {Search} from "vant";
-    import { getCategory } from "../../api/page.js";
+    import { getCategory } from "../../api/category";
     import CategoryLi from "../../components/common/categoryli";
     export default {
         name: "userindex",

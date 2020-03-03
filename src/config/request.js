@@ -1,20 +1,19 @@
 import axios from 'axios'
 import {Toast} from 'vant';
-import {baseUrl, dataSources} from './env';
+import {baseUrl} from './env';
 import datas from '../data/data';
-
-
+// import store from '../store';
 const service = axios.create({
     baseURL: baseUrl, // api 的 base_url
-    timeout: 5000, // request timeout
+    timeout: 30000, // request timeout
     headers: {'X-Requested-With': 'XMLHttpRequest'},
 });
-
 
 const request = function (parameter) {
     if (parameter.remote) {
         return service(parameter);
     } else {
+        //本地数据
         //定义回调函数和axios一致
         const promist = new Promise(function (resolve, reject) {
             var data = datas[parameter.url];
@@ -25,22 +24,6 @@ const request = function (parameter) {
         })
         return promist;
     }
-}
-
-const resetToken = function () {
-    service.interceptors.request.use(config => {
-        var token = {
-            jwt: localStorage.getItem('jwt'),
-            uid: localStorage.getItem('uid')
-        }
-        if (token != null) { // 判断是否存在token，如果存在的话，则每个http header都加上token
-            config.headers.token = token.jwt;
-            config.headers.uid = token.uid;
-        }
-        return config;
-    }, error => {
-        return Promise.reject(error);
-    });
 }
 
 /*  service.interceptors.request.use(
@@ -108,13 +91,13 @@ service.interceptors.response.use(
   )*/
 
 service.interceptors.request.use(config => {
-    var token = {
-        jwt: localStorage.getItem('jwt'),
-        uid: localStorage.getItem('uid')
-    }
-    if (token != null) { // 判断是否存在token，如果存在的话，则每个http header都加上token
-        config.headers.token = token.jwt;
-        config.headers.uid = token.uid;
+    // let account = store.getters['account/getAccount'];
+    // console.log('account', account);
+    let token = localStorage.getItem('token');
+    let uid = localStorage.getItem('uid');
+    if (token && uid) {
+        config.headers.token = token;
+        config.headers.uid = uid;
     }
     return config;
 }, error => {
@@ -122,7 +105,7 @@ service.interceptors.request.use(config => {
 });
 
 service.interceptors.response.use(res => {
-    if (res.data.code != '200') {
+    if (res.data.code != 200) {
         Toast(res.data.message);
     } else {
         return res.data.data;
@@ -130,4 +113,5 @@ service.interceptors.response.use(res => {
 }, error => {
     return Promise.reject(error);
 });
-export {request, resetToken};
+
+export {request};
